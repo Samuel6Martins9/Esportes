@@ -25,10 +25,10 @@ module.exports = {
         const { nome, valor, tipo } = req.body;
         await Produto.create({ nome, valor, tipo }).then((produto) => {
             req.flash('msg',produto.nome + ' foi adicionado com sucesso!');
-            res.redirect('/admin/produto/add');
+            res.redirect('/admin/produto/');
         }, (err) => {
             req.flash('msg', "Problemas ao adicionar o produto.")
-            res.redirect('/admin/produto/add');
+            res.redirect('/admin/produto/');
         });
     },
     async abreedit(req,res){
@@ -55,6 +55,20 @@ module.exports = {
         );
     },
     async del(req,res){
-
+        const id = req.params.id;
+        await Produto.destroy({
+            where: {
+                id:id
+            }
+            }).then(
+            (produto) => {
+                req.flash('msg', 'Produto foi deletado com sucesso!');
+                res.redirect('/admin/produto/')
+            },
+            (err) => {
+                req.flash('msg', 'Problema ao deletar o produto!');
+                res.redirect('/admin/produto/')
+            }
+        );
     }
 }
